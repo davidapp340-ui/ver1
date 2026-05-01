@@ -1,0 +1,506 @@
+{
+  "common": {
+    "app_name": "Zoomi",
+    "cancel": "ביטול",
+    "close": "סגור",
+    "save": "שמור",
+    "delete": "מחק",
+    "add": "הוסף",
+    "edit": "ערוך",
+    "loading": "טוען...",
+    "error": "שגיאה",
+    "success": "הצלחה",
+    "ok": "אישור",
+    "error_loading_data": "נכשל בטעינת הנתונים. אנא נסה שוב."
+  },
+  "nav": {
+    "home": "בית",
+    "science": "מדע",
+    "settings": "הגדרות"
+  },
+  "avatar_picker": {
+    "title": "בחר את הדמות שלך",
+    "tap_to_change": "לחץ לשינוי"
+  },
+  "role_selection": {
+    "title": "Zoomi",
+    "subtitle": "בחר תפקיד",
+    "parent_button": "הורה",
+    "parent_subtitle": "ניהול המשפחה",
+    "child_button": "ילד",
+    "child_subtitle": "התחל אימון",
+    "independent_button": "משתמש עצמאי",
+    "independent_subtitle": "להתאמן לבד"
+  },
+  "auth": {
+    "parent_login_title": "Zoomi",
+    "parent_login_subtitle": "כניסת הורה",
+    "parent_signup_subtitle": "יצירת חשבון הורה",
+    "first_name_label": "שם פרטי",
+    "first_name_placeholder": "הזן שם פרטי",
+    "last_name_label": "שם משפחה",
+    "last_name_placeholder": "הזן שם משפחה",
+    "email_placeholder": "אימייל",
+    "password_placeholder": "סיסמה",
+    "confirm_password_placeholder": "אימות סיסמה",
+    "sign_in_button": "התחבר",
+    "sign_up_button": "הרשם",
+    "toggle_to_signup": "אין לך חשבון? הירשם",
+    "toggle_to_signin": "כבר יש לך חשבון? התחבר",
+    "errors": {
+      "fill_all_fields": "נא למלא את כל השדות",
+      "passwords_not_match": "הסיסמאות אינן תואמות",
+      "password_too_short": "הסיסמה חייבת להכיל לפחות 6 תווים",
+      "auth_failed": "האימות נכשל",
+      "unexpected_error": "אירעה שגיאה בלתי צפויה"
+    }
+  },
+  "parent_home": {
+    "title": "Zoomi",
+    "subtitle": "לוח בקרה הורים",
+    "children_section_title": "ילדים",
+    "empty_state": "עדיין לא נוספו ילדים",
+    "empty_state_subtitle": "לחץ על כפתור + להוספת ילד",
+    "device_linked": "מכשיר מקושר",
+    "link_button": "קישור",
+    "add_child_wizard": {
+      "title": "הוספת פרופיל ילד",
+      "step_indicator": "שלב {{current}} מתוך {{total}}",
+      "step1": {
+        "title": "מידע בסיסי",
+        "name_label": "שם הילד",
+        "name_placeholder": "הזן שם",
+        "birth_date_label": "תאריך לידה",
+        "birth_date_placeholder": "בחר תאריך",
+        "gender_label": "מגדר (אופציונלי)",
+        "gender_placeholder": "בחר מגדר",
+        "next_button": "המשך",
+        "validation": {
+          "name_required": "שם הוא שדה חובה",
+          "birth_date_required": "תאריך לידה הוא שדה חובה",
+          "birth_date_future": "התאריך לא יכול להיות בעתיד"
+        }
+      },
+      "step2": {
+        "title": "פרופיל ראייה והסכמה",
+        "vision_section_title": "מידע על ראייה",
+        "vision_condition_label": "מצב ראייה",
+        "vision_condition_placeholder": "בחר מצב",
+        "wears_glasses_label": "מרכיב משקפיים?",
+        "prescription_section_title": "מרשם עדכני",
+        "prescription_left_label": "עין שמאל",
+        "prescription_left_placeholder": "לדוגמה: 2.50-",
+        "prescription_right_label": "עין ימין",
+        "prescription_right_placeholder": "לדוגמה: 1.75-",
+        "consent_section_title": "הסכמת הורה",
+        "consent_text": "אני מאשר/ת שאני ההורה/האפוטרופוס החוקי ומסכים/ה ל",
+        "terms_link": "תנאי השימוש",
+        "create_button": "צור פרופיל",
+        "back_button": "חזור",
+        "validation": {
+          "consent_required": "יש לתת הסכמה כדי להמשיך",
+          "prescription_invalid": "נא להזין מספר מרשם תקין"
+        }
+      },
+      "errors": {
+        "creation_failed": "יצירת הפרופיל נכשלה. נסה שנית."
+      },
+      "success": {
+        "profile_created": "הפרופיל נוצר בהצלחה!"
+      },
+      "policy_modal": {
+        "view_policy": "צפה במדיניות",
+        "loading": "טוען מדיניות...",
+        "error": "טעינת מסמך המדיניות נכשלה",
+        "close_button": "סגור"
+      }
+    },
+    "add_child_modal": {
+      "title": "הוספת ילד",
+      "name_placeholder": "שם הילד",
+      "cancel_button": "ביטול",
+      "add_button": "הוסף",
+      "error_empty_name": "נא להזין שם",
+      "error_failed": "הוספת הילד נכשלה"
+    },
+    "linking_code_modal": {
+      "title": "קוד קישור",
+      "instructions": "שתף קוד זה עם {{childName}}. הקוד יפוג בעוד 10 דקות.",
+      "copy_success": "הקוד הועתק ללוח",
+      "close_button": "סגור"
+    },
+    "code_generation_errors": {
+      "unauthorized": "אין לך הרשאה ליצור קוד לילד זה",
+      "child_not_found": "הילד לא נמצא",
+      "system_busy": "המערכת עסוקה, נסה שוב",
+      "generic_error": "יצירת הקוד נכשלה"
+    }
+  },
+  "child_login": {
+    "title": "Zoomi",
+    "subtitle": "כניסת ילד",
+    "instructions": "הזן את קוד בן 6 התווים ממכשיר ההורה",
+    "code_placeholder": "הזן קוד",
+    "connect_button": "התחבר",
+    "errors": {
+      "invalid_code": "נא להזין קוד בן 6 תווים",
+      "code_invalid_or_expired": "קוד לא חוקי או פג תוקף",
+      "unexpected_error": "אירעה שגיאה בלתי צפויה"
+    }
+  },
+  "child_home": {
+    "title": "Zoomi",
+    "welcome": "שלום, {{childName}}!",
+    "stats": {
+      "points": "נקודות",
+      "streak": "רצף ימים",
+      "day_value": "יום {{day}}",
+      "day_label": "מסע"
+    },
+    "ready_workout_title": "מוכן לאימון!",
+    "ready_workout_text": "תוכניות האימון שלך יופיעו כאן. הישאר מעודכן לסשנים מרגשים!",
+    "coming_soon_title": "בקרוב:",
+    "coming_soon_custom_paths": "מסלולי אימון מותאמים אישית",
+    "coming_soon_progress": "מעקב אחר התקדמות",
+    "coming_soon_badges": "תגי הישגים",
+    "coming_soon_challenges": "אתגרים משפחתיים"
+  },
+  "child_navigation": {
+    "tabs": {
+      "home": "בית",
+      "library": "גלריה",
+      "path": "מסע",
+      "profile": "פרופיל"
+    },
+    "home_screen": {
+      "title": "בסיס הבית",
+      "placeholder": "ברוכים הבאים לבסיס הבית שלך"
+    },
+    "library_screen": {
+      "title": "גלריית תרגילים",
+      "construction_title": "בבנייה",
+      "construction_message": "תוכן תרגילים מרגש בקרוב!"
+    },
+    "path_screen": {
+      "title": "המסע שלי",
+      "construction_title": "בבנייה",
+      "construction_message": "עקוב אחר ההתקדמות שלך בקרוב!"
+    }
+  },
+  "path": {
+    "title": "המסע שלך",
+    "day": "יום",
+    "streak": "רצף",
+    "points": "נקודות",
+    "treasure_claimed": "אוצר נאסף!",
+    "treasure_points": "הרווחת {{points}} נקודות בונוס!",
+    "treasure_error": "נכשל באיסוף האוצר. אנא נסה שוב.",
+    "coming_soon_title": "בקרוב",
+    "coming_soon_message": "תרגילים ליום זה עדיין לא זמינים. חזור בקרוב!"
+  },
+  "child_profile": {
+    "title": "פרופיל",
+    "sections": {
+      "settings": "הגדרות"
+    },
+    "language": {
+      "title": "שפה",
+      "current_hebrew": "עברית",
+      "current_english": "English"
+    },
+    "sign_out": "התנתק"
+  },
+  "language": {
+    "switch_language": "החלף שפה",
+    "hebrew": "עברית",
+    "english": "English"
+  },
+  "medical": {
+    "gender": {
+      "male": "זכר",
+      "female": "נקבה",
+      "other": "אחר"
+    },
+    "vision_conditions": {
+      "myopia": "קוצר ראייה (מיופיה)",
+      "hyperopia": "רוחק ראייה (היפרמטרופיה)",
+      "amblyopia": "עין עצלה (אמבליופיה)",
+      "strabismus": "פזילה (סטרביזמוס)",
+      "other": "מצב אחר",
+      "unknown": "טרם אובחן"
+    }
+  },
+  "settings": {
+    "sections": {
+      "family_management": "ניהול משפחה",
+      "general_settings": "הגדרות כלליות",
+      "support_info": "תמיכה ומידע"
+    },
+    "family": {
+      "loading": "טוען ילדים...",
+      "empty_title": "עדיין אין פרופילי ילדים",
+      "empty_subtitle": "הוסף ילד מהכרטיסייה הבית",
+      "status_active": "פעיל",
+      "status_frozen": "מוקפא"
+    },
+    "language": {
+      "title": "שפה",
+      "current_hebrew": "עברית",
+      "current_english": "English"
+    },
+    "support": {
+      "whatsapp_title": "תמיכה בווטסאפ",
+      "whatsapp_description": "קבל עזרה מהצוות שלנו",
+      "website_title": "בקר באתר",
+      "website_description": "למד עוד על Zoomi"
+    },
+    "footer": {
+      "sign_out": "התנתק",
+      "version": "גרסה 1.0.0"
+    },
+    "manage_child": {
+      "title": "נהל את {{childName}}",
+      "message": "בחר פעולה",
+      "freeze_subscription": "הקפא מנוי",
+      "activate_subscription": "הפעל מנוי",
+      "delete_profile": "מחק פרופיל",
+      "cancel": "ביטול"
+    },
+    "toggle_subscription": {
+      "success_title": "הצלחה",
+      "success_message_activated": "המנוי של {{childName}} הופעל.",
+      "success_message_frozen": "המנוי של {{childName}} הוקפא.",
+      "error_title": "שגיאה",
+      "error_message": "עדכון סטטוס המנוי נכשל. נסה שוב."
+    },
+    "delete_child": {
+      "confirm_title": "מחק פרופיל",
+      "confirm_message": "האם אתה בטוח שברצונך למחוק את הפרופיל של {{childName}}? לא ניתן לבטל פעולה זו.",
+      "confirm_button": "מחק",
+      "cancel_button": "ביטול",
+      "success_title": "הצלחה",
+      "success_message": "הפרופיל של {{childName}} נמחק.",
+      "error_title": "שגיאה",
+      "error_message": "מחיקת הפרופיל נכשלה. נסה שוב."
+    },
+    "errors": {
+      "whatsapp_not_installed": "לא ניתן לפתוח את ווטסאפ. ודא שהאפליקציה מותקנת.",
+      "website_failed": "לא ניתן לפתוח את האתר."
+    }
+  },
+  "science": {
+    "title": "מדע וטיפים",
+    "loading": "טוען מאמרים...",
+    "empty": "אין מאמרים זמינים עדיין",
+    "error": "נכשל בטעינת המאמרים. נסה שוב.",
+    "faq_card_title": "שאלות ותשובות",
+    "faq_card_subtitle": "מצאו תשובות לשאלות נפוצות",
+    "article_detail": {
+      "loading": "טוען מאמר...",
+      "error": "נכשל בטעינת תוכן המאמר",
+      "back": "חזרה למאמרים"
+    },
+    "faq": {
+      "title": "שאלות ותשובות",
+      "loading": "טוען שאלות...",
+      "empty": "אין שאלות זמינות עדיין",
+      "error": "נכשל בטעינת השאלות. נסה שוב."
+    }
+  },
+  "independent_login": {
+    "title": "ברוך שובך",
+    "subtitle": "התחבר לחשבון שלך",
+    "email_label": "אימייל",
+    "email_placeholder": "הזן את האימייל שלך",
+    "password_label": "סיסמה",
+    "password_placeholder": "הזן את הסיסמה שלך",
+    "sign_in_button": "התחבר",
+    "toggle_to_signup": "אין לך חשבון? הירשם",
+    "validation": {
+      "email_required": "אימייל הוא שדה חובה",
+      "email_invalid": "נא להזין אימייל תקין",
+      "password_required": "סיסמה היא שדה חובה"
+    },
+    "errors": {
+      "login_failed": "ההתחברות נכשלה. בדוק את הפרטים ונסה שנית.",
+      "unexpected_error": "אירעה שגיאה בלתי צפויה"
+    }
+  },
+  "independent_signup": {
+    "title": "יצירת חשבון",
+    "step_indicator": "שלב {{current}} מתוך {{total}}",
+    "step1": {
+      "title": "פרטי התחברות",
+      "email_label": "אימייל",
+      "email_placeholder": "הזן את האימייל שלך",
+      "password_label": "סיסמה",
+      "password_placeholder": "צור סיסמה",
+      "confirm_password_label": "אימות סיסמה",
+      "confirm_password_placeholder": "אמת את הסיסמה",
+      "next_button": "המשך",
+      "toggle_to_login": "כבר יש לך חשבון? התחבר"
+    },
+    "step2": {
+      "title": "פרטים אישיים וראייה",
+      "name_section_title": "מידע אישי",
+      "first_name_label": "שם פרטי",
+      "first_name_placeholder": "הזן שם פרטי",
+      "last_name_label": "שם משפחה",
+      "last_name_placeholder": "הזן שם משפחה",
+      "birth_date_label": "תאריך לידה",
+      "birth_date_placeholder": "בחר תאריך",
+      "gender_label": "מגדר (אופציונלי)",
+      "vision_section_title": "מידע על ראייה",
+      "vision_condition_label": "מצב ראייה",
+      "wears_glasses_label": "מרכיב/ה משקפיים?",
+      "prescription_section_title": "מרשם עדכני",
+      "prescription_left_label": "עין שמאל",
+      "prescription_left_placeholder": "לדוגמה: 2.50-",
+      "prescription_right_label": "עין ימין",
+      "prescription_right_placeholder": "לדוגמה: 1.75-",
+      "next_button": "המשך",
+      "back_button": "חזור"
+    },
+    "step3": {
+      "title": "תנאים ופרטיות",
+      "consent_text": "אני מסכים/ה ל",
+      "terms_link": "תנאי השימוש",
+      "and": "ו",
+      "privacy_link": "מדיניות הפרטיות",
+      "create_button": "צור חשבון",
+      "back_button": "חזור"
+    },
+    "validation": {
+      "email_required": "אימייל הוא שדה חובה",
+      "email_invalid": "נא להזין אימייל תקין",
+      "password_required": "סיסמה היא שדה חובה",
+      "password_too_short": "הסיסמה חייבת להכיל לפחות 6 תווים",
+      "passwords_not_match": "הסיסמאות אינן תואמות",
+      "first_name_required": "שם פרטי הוא שדה חובה",
+      "birth_date_required": "תאריך לידה הוא שדה חובה",
+      "birth_date_future": "התאריך לא יכול להיות בעתיד",
+      "consent_required": "יש להסכים לתנאים כדי להמשיך",
+      "prescription_invalid": "נא להזין מספר מרשם תקין"
+    },
+    "errors": {
+      "registration_failed": "ההרשמה נכשלה. נסה שנית."
+    },
+    "policy_modal": {
+      "view_policy": "צפה במדיניות",
+      "loading": "טוען...",
+      "error": "טעינת המסמך נכשלה",
+      "close_button": "סגור"
+    }
+  },
+  "independent": {
+    "tabs": {
+      "home": "בית",
+      "journey": "מסע",
+      "gallery": "גלריה",
+      "articles": "מאמרים",
+      "settings": "הגדרות"
+    },
+    "home": {
+      "greeting": "ברוך שובך, {{name}}",
+      "progress_title": "ההתקדמות שלך",
+      "day_of": "יום {{current}} מתוך {{total}}",
+      "cycle": "מחזור {{cycle}}",
+      "start_exercise": "התחל את האימון היומי",
+      "rest_day": "היום יום מנוחה",
+      "rest_day_description": "קח הפסקה ותן לעיניים להתאושש. מגיע לך!",
+      "stats": {
+        "points": "נקודות",
+        "streak": "רצף",
+        "days": "ימים"
+      },
+      "recent_activity": "פעילות אחרונה",
+      "no_activity": "השלם את התרגיל הראשון שלך כדי לראות פעילות כאן",
+      "session_error": "לא ניתן לטעון את הפרופיל שלך. אנא התחבר שנית."
+    },
+    "articles": {
+      "title": "מאמרים וטיפים",
+      "loading": "טוען מאמרים...",
+      "empty": "אין מאמרים זמינים עדיין",
+      "error": "נכשל בטעינת המאמרים. נסה שוב.",
+      "faq_card_title": "שאלות נפוצות",
+      "faq_card_subtitle": "מצאו תשובות לשאלות נפוצות"
+    },
+    "faq": {
+      "title": "שאלות נפוצות",
+      "loading": "טוען שאלות...",
+      "empty": "אין שאלות זמינות עדיין",
+      "error": "נכשל בטעינת השאלות. נסה שוב."
+    },
+    "settings": {
+      "title": "הגדרות",
+      "profile_section": "הפרופיל שלי",
+      "vision_info": "מידע על ראייה",
+      "vision_condition": "מצב",
+      "glasses": "מרכיב משקפיים",
+      "glasses_yes": "כן",
+      "glasses_no": "לא",
+      "prescription_left": "עין שמאל",
+      "prescription_right": "עין ימין",
+      "general_section": "כללי",
+      "support_section": "תמיכה ומידע",
+      "sign_out": "התנתק",
+      "version": "גרסה 1.0.0"
+    }
+  },
+  "child_profile_screen": {
+    "connect_device": "חבר מכשיר חדש",
+    "connect_device_subtitle": "צור קוד קישור עבור ילד זה",
+    "stats_title": "סקירת פעילות",
+    "stat_streak": "רצף נוכחי",
+    "stat_practice_time": "זמן אימון",
+    "stat_last_activity": "פעילות אחרונה"
+  },
+  "notifications": {
+    "section_title": "התראות",
+    "enable_label": "הפעל התראות",
+    "enable_description": "קבל תזכורת יומית לאימון",
+    "reminder_time_label": "שעת תזכורת יומית",
+    "reminder_time_description": "מתי לשלוח תזכורת?",
+    "reminder_title": "הגיע הזמן להתאמן!",
+    "reminder_body": "האימון היומי לעיניים מחכה לך. קדימה!",
+    "enabled_success": "התראות הופעלו",
+    "disabled_success": "התראות כובו",
+    "permission_denied": "הרשאת התראות נדחתה. הפעל אותה בהגדרות המכשיר.",
+    "not_available": "התראות אינן זמינות במכשיר זה",
+    "save_error": "שמירת הגדרות ההתראות נכשלה",
+    "child": {
+      "section_title": "התזכורות שלי",
+      "enable_button": "הפעל תזכורות",
+      "enabled_label": "תזכורות פעילות",
+      "enabled_description": "תקבל תזכורת יומית להתאמן",
+      "disable_button": "כבה",
+      "reminder_time_label": "שעת תזכורת",
+      "reminder_body": "היי אלוף! הגיע הזמן לתרגילי עיניים!"
+    }
+  },
+  "exercise_player": {
+    "progress": "תרגיל {{current}} מתוך {{total}}",
+    "loading_next": "...התרגיל הבא",
+    "do_reps": "בצע {{count}} חזרות",
+    "im_done": "סיימתי",
+    "saving": "...שומר התקדמות",
+    "playing": "...מנגן",
+    "ready": "מוכן להתחיל",
+    "start": "התחל תרגיל",
+    "start_workout": "התחל אימון",
+    "play_again": "נגן שוב"
+  },
+  "completion_modal": {
+    "title": "!התרגיל הושלם",
+    "workout_title": "!האימון הושלם",
+    "subtitle": "!כל הכבוד! המשיכו כך",
+    "workout_subtitle": "!השלמת את כל {{count}} התרגילים",
+    "points_label": "מטבעות",
+    "button": "!מעולה"
+  },
+  "session_lock": {
+    "blocked_title": "חיבור פעיל",
+    "blocked_message": "החשבון הזה נמצא כרגע בשימוש במכשיר אחר. אנא סגרו את החיבור השני, או המתינו מספר דקות ונסו שוב.",
+    "ok_button": "אישור"
+  }
+}

@@ -1,0 +1,506 @@
+{
+  "common": {
+    "app_name": "Zoomi",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "delete": "Delete",
+    "add": "Add",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "ok": "OK",
+    "error_loading_data": "Failed to load data. Please try again."
+  },
+  "nav": {
+    "home": "Home",
+    "science": "Science",
+    "settings": "Settings"
+  },
+  "avatar_picker": {
+    "title": "Choose Your Avatar",
+    "tap_to_change": "Tap to change"
+  },
+  "role_selection": {
+    "title": "Zoomi",
+    "subtitle": "Select Role",
+    "parent_button": "Parent",
+    "parent_subtitle": "Manage your family",
+    "child_button": "Child",
+    "child_subtitle": "Start training",
+    "independent_button": "Independent User",
+    "independent_subtitle": "Train on my own"
+  },
+  "auth": {
+    "parent_login_title": "Zoomi",
+    "parent_login_subtitle": "Parent Login",
+    "parent_signup_subtitle": "Create Parent Account",
+    "first_name_label": "First Name",
+    "first_name_placeholder": "Enter first name",
+    "last_name_label": "Last Name",
+    "last_name_placeholder": "Enter last name",
+    "email_placeholder": "Email",
+    "password_placeholder": "Password",
+    "confirm_password_placeholder": "Confirm Password",
+    "sign_in_button": "Sign In",
+    "sign_up_button": "Sign Up",
+    "toggle_to_signup": "Don't have an account? Sign Up",
+    "toggle_to_signin": "Already have an account? Sign In",
+    "errors": {
+      "fill_all_fields": "Please fill in all fields",
+      "passwords_not_match": "Passwords do not match",
+      "password_too_short": "Password must be at least 6 characters",
+      "auth_failed": "Authentication failed",
+      "unexpected_error": "An unexpected error occurred"
+    }
+  },
+  "parent_home": {
+    "title": "Zoomi",
+    "subtitle": "Parent Dashboard",
+    "children_section_title": "Children",
+    "empty_state": "No children added yet",
+    "empty_state_subtitle": "Tap the + button to add a child",
+    "device_linked": "Device Linked",
+    "link_button": "Link",
+    "add_child_wizard": {
+      "title": "Add Child Profile",
+      "step_indicator": "Step {{current}} of {{total}}",
+      "step1": {
+        "title": "Basic Information",
+        "name_label": "Child's Name",
+        "name_placeholder": "Enter name",
+        "birth_date_label": "Date of Birth",
+        "birth_date_placeholder": "Select date",
+        "gender_label": "Gender (Optional)",
+        "gender_placeholder": "Select gender",
+        "next_button": "Next",
+        "validation": {
+          "name_required": "Name is required",
+          "birth_date_required": "Date of birth is required",
+          "birth_date_future": "Date cannot be in the future"
+        }
+      },
+      "step2": {
+        "title": "Vision Profile & Consent",
+        "vision_section_title": "Vision Information",
+        "vision_condition_label": "Vision Status",
+        "vision_condition_placeholder": "Select condition",
+        "wears_glasses_label": "Wears Glasses?",
+        "prescription_section_title": "Current Prescription",
+        "prescription_left_label": "Left Eye",
+        "prescription_left_placeholder": "e.g., -2.50",
+        "prescription_right_label": "Right Eye",
+        "prescription_right_placeholder": "e.g., -1.75",
+        "consent_section_title": "Parent Consent",
+        "consent_text": "I confirm that I am the parent/legal guardian and agree to the",
+        "terms_link": "Terms of Use",
+        "create_button": "Create Profile",
+        "back_button": "Back",
+        "validation": {
+          "consent_required": "You must provide consent to continue",
+          "prescription_invalid": "Please enter a valid prescription number"
+        }
+      },
+      "errors": {
+        "creation_failed": "Failed to create profile. Please try again."
+      },
+      "success": {
+        "profile_created": "Profile created successfully!"
+      },
+      "policy_modal": {
+        "view_policy": "View Policy",
+        "loading": "Loading policy...",
+        "error": "Failed to load policy document",
+        "close_button": "Close"
+      }
+    },
+    "add_child_modal": {
+      "title": "Add Child",
+      "name_placeholder": "Child's Name",
+      "cancel_button": "Cancel",
+      "add_button": "Add",
+      "error_empty_name": "Please enter a name",
+      "error_failed": "Failed to add child"
+    },
+    "linking_code_modal": {
+      "title": "Linking Code",
+      "instructions": "Share this code with {{childName}}. It expires in 10 minutes.",
+      "copy_success": "Code copied to clipboard",
+      "close_button": "Close"
+    },
+    "code_generation_errors": {
+      "unauthorized": "You do not have permission to generate a code for this child",
+      "child_not_found": "Child not found",
+      "system_busy": "System busy, please try again",
+      "generic_error": "Failed to generate code"
+    }
+  },
+  "child_login": {
+    "title": "Zoomi",
+    "subtitle": "Child Login",
+    "instructions": "Enter the 6-character code from your parent's device",
+    "code_placeholder": "Enter Code",
+    "connect_button": "Connect",
+    "errors": {
+      "invalid_code": "Please enter a valid 6-character code",
+      "code_invalid_or_expired": "Invalid or expired code",
+      "unexpected_error": "An unexpected error occurred"
+    }
+  },
+  "child_home": {
+    "title": "Zoomi",
+    "welcome": "Welcome, {{childName}}!",
+    "stats": {
+      "points": "Points",
+      "streak": "Day Streak",
+      "day_value": "Day {{day}}",
+      "day_label": "Journey"
+    },
+    "ready_workout_title": "Ready to Workout!",
+    "ready_workout_text": "Your workout programs will appear here. Stay tuned for exciting training sessions!",
+    "coming_soon_title": "Coming Soon:",
+    "coming_soon_custom_paths": "Custom workout paths",
+    "coming_soon_progress": "Progress tracking",
+    "coming_soon_badges": "Achievement badges",
+    "coming_soon_challenges": "Family challenges"
+  },
+  "child_navigation": {
+    "tabs": {
+      "home": "Home",
+      "library": "Gallery",
+      "path": "Journey",
+      "profile": "Profile"
+    },
+    "home_screen": {
+      "title": "Home Base",
+      "placeholder": "Welcome to your Home Base"
+    },
+    "library_screen": {
+      "title": "Exercise Gallery",
+      "construction_title": "Under Construction",
+      "construction_message": "Exciting exercise content coming soon!"
+    },
+    "path_screen": {
+      "title": "My Journey",
+      "construction_title": "Under Construction",
+      "construction_message": "Track your progress here soon!"
+    }
+  },
+  "path": {
+    "title": "Your Journey",
+    "day": "Day",
+    "streak": "Streak",
+    "points": "Points",
+    "treasure_claimed": "Treasure Claimed!",
+    "treasure_points": "You earned {{points}} bonus points!",
+    "treasure_error": "Failed to claim treasure. Please try again.",
+    "coming_soon_title": "Coming Soon",
+    "coming_soon_message": "This day's exercises are not available yet. Check back soon!"
+  },
+  "child_profile": {
+    "title": "Profile",
+    "sections": {
+      "settings": "Settings"
+    },
+    "language": {
+      "title": "Language",
+      "current_hebrew": "Hebrew",
+      "current_english": "English"
+    },
+    "sign_out": "Sign Out"
+  },
+  "language": {
+    "switch_language": "Switch Language",
+    "hebrew": "עברית",
+    "english": "English"
+  },
+  "medical": {
+    "gender": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "vision_conditions": {
+      "myopia": "Myopia (Nearsightedness)",
+      "hyperopia": "Hyperopia (Farsightedness)",
+      "amblyopia": "Amblyopia (Lazy Eye)",
+      "strabismus": "Strabismus (Crossed Eyes)",
+      "other": "Other Condition",
+      "unknown": "Not Yet Diagnosed"
+    }
+  },
+  "settings": {
+    "sections": {
+      "family_management": "Family Management",
+      "general_settings": "General Settings",
+      "support_info": "Support & Info"
+    },
+    "family": {
+      "loading": "Loading children...",
+      "empty_title": "No children profiles yet",
+      "empty_subtitle": "Add a child from the Home tab",
+      "status_active": "Active",
+      "status_frozen": "Frozen"
+    },
+    "language": {
+      "title": "Language",
+      "current_hebrew": "Hebrew",
+      "current_english": "English"
+    },
+    "support": {
+      "whatsapp_title": "WhatsApp Support",
+      "whatsapp_description": "Get help from our team",
+      "website_title": "Visit Website",
+      "website_description": "Learn more about Zoomi"
+    },
+    "footer": {
+      "sign_out": "Sign Out",
+      "version": "Version 1.0.0"
+    },
+    "manage_child": {
+      "title": "Manage {{childName}}",
+      "message": "Choose an action",
+      "freeze_subscription": "Freeze Subscription",
+      "activate_subscription": "Activate Subscription",
+      "delete_profile": "Delete Profile",
+      "cancel": "Cancel"
+    },
+    "toggle_subscription": {
+      "success_title": "Success",
+      "success_message_activated": "{{childName}}'s subscription has been activated.",
+      "success_message_frozen": "{{childName}}'s subscription has been frozen.",
+      "error_title": "Error",
+      "error_message": "Failed to update subscription status. Please try again."
+    },
+    "delete_child": {
+      "confirm_title": "Delete Profile",
+      "confirm_message": "Are you sure you want to delete {{childName}}'s profile? This action cannot be undone.",
+      "confirm_button": "Delete",
+      "cancel_button": "Cancel",
+      "success_title": "Success",
+      "success_message": "{{childName}}'s profile has been deleted.",
+      "error_title": "Error",
+      "error_message": "Failed to delete profile. Please try again."
+    },
+    "errors": {
+      "whatsapp_not_installed": "Could not open WhatsApp. Please make sure it is installed.",
+      "website_failed": "Could not open the website."
+    }
+  },
+  "science": {
+    "title": "Science & Tips",
+    "loading": "Loading articles...",
+    "empty": "No articles available yet",
+    "error": "Failed to load articles. Please try again.",
+    "faq_card_title": "Questions & Answers",
+    "faq_card_subtitle": "Find answers to frequently asked questions",
+    "article_detail": {
+      "loading": "Loading article...",
+      "error": "Failed to load article content",
+      "back": "Back to Articles"
+    },
+    "faq": {
+      "title": "Questions & Answers",
+      "loading": "Loading questions...",
+      "empty": "No questions available yet",
+      "error": "Failed to load questions. Please try again."
+    }
+  },
+  "independent_login": {
+    "title": "Welcome Back",
+    "subtitle": "Sign in to your account",
+    "email_label": "Email",
+    "email_placeholder": "Enter your email",
+    "password_label": "Password",
+    "password_placeholder": "Enter your password",
+    "sign_in_button": "Sign In",
+    "toggle_to_signup": "Don't have an account? Sign up",
+    "validation": {
+      "email_required": "Email is required",
+      "email_invalid": "Please enter a valid email",
+      "password_required": "Password is required"
+    },
+    "errors": {
+      "login_failed": "Login failed. Please check your credentials.",
+      "unexpected_error": "An unexpected error occurred"
+    }
+  },
+  "independent_signup": {
+    "title": "Create Account",
+    "step_indicator": "Step {{current}} of {{total}}",
+    "step1": {
+      "title": "Your Credentials",
+      "email_label": "Email",
+      "email_placeholder": "Enter your email",
+      "password_label": "Password",
+      "password_placeholder": "Create a password",
+      "confirm_password_label": "Confirm Password",
+      "confirm_password_placeholder": "Confirm your password",
+      "next_button": "Next",
+      "toggle_to_login": "Already have an account? Log in"
+    },
+    "step2": {
+      "title": "Personal & Vision Details",
+      "name_section_title": "Personal Information",
+      "first_name_label": "First Name",
+      "first_name_placeholder": "Enter first name",
+      "last_name_label": "Last Name",
+      "last_name_placeholder": "Enter last name",
+      "birth_date_label": "Date of Birth",
+      "birth_date_placeholder": "Select date",
+      "gender_label": "Gender (Optional)",
+      "vision_section_title": "Vision Information",
+      "vision_condition_label": "Vision Status",
+      "wears_glasses_label": "Do you wear glasses?",
+      "prescription_section_title": "Current Prescription",
+      "prescription_left_label": "Left Eye",
+      "prescription_left_placeholder": "e.g., -2.50",
+      "prescription_right_label": "Right Eye",
+      "prescription_right_placeholder": "e.g., -1.75",
+      "next_button": "Next",
+      "back_button": "Back"
+    },
+    "step3": {
+      "title": "Terms & Privacy",
+      "consent_text": "I agree to the",
+      "terms_link": "Terms of Use",
+      "and": "and",
+      "privacy_link": "Privacy Policy",
+      "create_button": "Create Account",
+      "back_button": "Back"
+    },
+    "validation": {
+      "email_required": "Email is required",
+      "email_invalid": "Please enter a valid email",
+      "password_required": "Password is required",
+      "password_too_short": "Password must be at least 6 characters",
+      "passwords_not_match": "Passwords do not match",
+      "first_name_required": "First name is required",
+      "birth_date_required": "Date of birth is required",
+      "birth_date_future": "Date cannot be in the future",
+      "consent_required": "You must agree to the terms to continue",
+      "prescription_invalid": "Please enter a valid prescription number"
+    },
+    "errors": {
+      "registration_failed": "Registration failed. Please try again."
+    },
+    "policy_modal": {
+      "view_policy": "View Policy",
+      "loading": "Loading...",
+      "error": "Failed to load document",
+      "close_button": "Close"
+    }
+  },
+  "independent": {
+    "tabs": {
+      "home": "Home",
+      "journey": "Journey",
+      "gallery": "Gallery",
+      "articles": "Articles",
+      "settings": "Settings"
+    },
+    "home": {
+      "greeting": "Welcome back, {{name}}",
+      "progress_title": "Your Progress",
+      "day_of": "Day {{current}} of {{total}}",
+      "cycle": "Cycle {{cycle}}",
+      "start_exercise": "Start Today's Exercise",
+      "rest_day": "Today is a Rest Day",
+      "rest_day_description": "Take it easy and let your eyes recover. You've earned it!",
+      "stats": {
+        "points": "Points",
+        "streak": "Streak",
+        "days": "days"
+      },
+      "recent_activity": "Recent Activity",
+      "no_activity": "Complete your first exercise to see activity here",
+      "session_error": "Unable to load your profile. Please sign in again."
+    },
+    "articles": {
+      "title": "Articles & Tips",
+      "loading": "Loading articles...",
+      "empty": "No articles available yet",
+      "error": "Failed to load articles. Please try again.",
+      "faq_card_title": "Common Questions",
+      "faq_card_subtitle": "Find answers to frequently asked questions"
+    },
+    "faq": {
+      "title": "Common Questions",
+      "loading": "Loading questions...",
+      "empty": "No questions available yet",
+      "error": "Failed to load questions. Please try again."
+    },
+    "settings": {
+      "title": "Settings",
+      "profile_section": "My Profile",
+      "vision_info": "Vision Information",
+      "vision_condition": "Condition",
+      "glasses": "Wears Glasses",
+      "glasses_yes": "Yes",
+      "glasses_no": "No",
+      "prescription_left": "Left Eye",
+      "prescription_right": "Right Eye",
+      "general_section": "General",
+      "support_section": "Support & Info",
+      "sign_out": "Sign Out",
+      "version": "Version 1.0.0"
+    }
+  },
+  "child_profile_screen": {
+    "connect_device": "Connect New Device",
+    "connect_device_subtitle": "Generate a linking code for this child",
+    "stats_title": "Activity Overview",
+    "stat_streak": "Current Streak",
+    "stat_practice_time": "Practice Time",
+    "stat_last_activity": "Last Activity"
+  },
+  "notifications": {
+    "section_title": "Notifications",
+    "enable_label": "Enable Notifications",
+    "enable_description": "Receive daily workout reminders",
+    "reminder_time_label": "Daily Reminder Time",
+    "reminder_time_description": "When should we remind you?",
+    "reminder_title": "Time to Train!",
+    "reminder_body": "Your daily eye workout is waiting. Let's go!",
+    "enabled_success": "Notifications enabled",
+    "disabled_success": "Notifications disabled",
+    "permission_denied": "Notification permission denied. Enable it in your device settings.",
+    "not_available": "Notifications are not available on this device",
+    "save_error": "Failed to save notification settings",
+    "child": {
+      "section_title": "My Reminders",
+      "enable_button": "Turn on Reminders",
+      "enabled_label": "Reminders Active",
+      "enabled_description": "You'll get a daily reminder to exercise",
+      "disable_button": "Turn off",
+      "reminder_time_label": "Reminder Time",
+      "reminder_body": "Hey champ! Time for your eye exercises!"
+    }
+  },
+  "exercise_player": {
+    "progress": "Exercise {{current}} of {{total}}",
+    "loading_next": "Next exercise...",
+    "do_reps": "Do {{count}} Reps",
+    "im_done": "I'm Done",
+    "saving": "Saving progress...",
+    "playing": "Playing...",
+    "ready": "Ready to start",
+    "start": "Start Exercise",
+    "start_workout": "Start Workout",
+    "play_again": "Play Again"
+  },
+  "completion_modal": {
+    "title": "Exercise Complete!",
+    "workout_title": "Workout Complete!",
+    "subtitle": "Great job! Keep it up!",
+    "workout_subtitle": "You completed all {{count}} exercises!",
+    "points_label": "Coins",
+    "button": "Awesome!"
+  },
+  "session_lock": {
+    "blocked_title": "Session Active",
+    "blocked_message": "This account is currently in use on another device. Please close the other session first, or wait a couple of minutes and try again.",
+    "ok_button": "OK"
+  }
+}
