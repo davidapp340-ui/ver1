@@ -11,11 +11,12 @@ import Animated, {
   withSequence,
   Easing
 } from 'react-native-reanimated';
-import { Check, Lock, Star, Gift } from 'lucide-react-native';
+import { Check, Lock, Star, Gift, Play, Sparkles } from 'lucide-react-native';
 import { useChildSession } from '@/contexts/ChildSessionContext';
 import { supabase } from '@/lib/supabase';
 import { Database } from '@/lib/database.types';
-import { getThemeById, type WorldTheme } from '@/lib/worldThemes';
+import { type WorldTheme } from '@/lib/worldThemes';
+import { useMonthlyTheme } from '@/hooks/useMonthlyTheme';
 import SvgConnectedPath, { type NodeCoord } from '@/components/game-path/SvgConnectedPath';
 import PathDecoration from '@/components/path/PathDecoration';
 import DayPreviewModal from '@/components/path/DayPreviewModal';
@@ -23,27 +24,35 @@ import React from 'react';
 
 type DailyPlan = Database['public']['Tables']['daily_plans']['Row'];
 
-const NODE_SIZE = 60;
-const CURRENT_NODE_SIZE = 72;
-const VERTICAL_SPACING = 120;
-const TOP_PADDING = 40;
-const BOTTOM_PADDING = 120;
 const SINE_FREQUENCY = 0.55;
+const MOBILE_BREAKPOINT = 480;
+
+function getLayoutMetrics(containerWidth: number) {
+  const isCompact = containerWidth < MOBILE_BREAKPOINT;
+  return {
+    isCompact,
+    nodeSize: isCompact ? 52 : 60,
+    currentNodeSize: isCompact ? 64 : 72,
+    verticalSpacing: isCompact ? 96 : 116,
+    topPadding: isCompact ? 28 : 40,
+    bottomPadding: isCompact ? 80 : 120,
+  };
+}
 
 function computeSinePositions(
   count: number,
   containerWidth: number,
+  metrics: ReturnType<typeof getLayoutMetrics>,
 ): NodeCoord[] {
   const centerX = containerWidth / 2;
-  const amplitude = containerWidth * 0.28;
-  const totalHeight = (count - 1) * VERTICAL_SPACING + TOP_PADDING + BOTTOM_PADDING;
+  const amplitude = containerWidth * (metrics.isCompact ? 0.32 : 0.28);
 
   const positions: NodeCoord[] = [];
   for (let i = 0; i < count; i++) {
     const fromBottom = count - 1 - i;
     positions.push({
       x: centerX + Math.sin(i * SINE_FREQUENCY) * amplitude,
-      y: TOP_PADDING + fromBottom * VERTICAL_SPACING,
+      y: metrics.topPadding + fromBottom * metrics.verticalSpacing,
     });
   }
 
@@ -61,25 +70,27 @@ export default function PathScreen() {
   const [claimingTreasure, setClaimingTreasure] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<DailyPlan | null>(null);
   const [isPreviewVisible, setIsPreviewVisible] = useState(false);
+  const [todayCompleted, setTodayCompleted] = useState(false);
+  const autoOpenedRef = useRef(false);
   const scrollRef = useRef<ScrollView>(null);
 
   const pathWidth = screenWidth;
   const dayCount = 30;
+  const safePathDay = Math.min(30, Math.max(1, Number(child?.path_day) || 1));
+
+  const layout = useMemo(() => getLayoutMetrics(pathWidth), [pathWidth]);
 
   const nodePositions = useMemo(
-    () => computeSinePositions(dayCount, pathWidth),
-    [dayCount, pathWidth]
+    () => computeSinePositions(dayCount, pathWidth, layout),
+    [dayCount, pathWidth, layout]
   );
 
   const totalPathHeight = useMemo(
-    () => (dayCount - 1) * VERTICAL_SPACING + TOP_PADDING + BOTTOM_PADDING,
-    [dayCount]
+    () => (dayCount - 1) * layout.verticalSpacing + layout.topPadding + layout.bottomPadding,
+    [dayCount, layout]
   );
 
-  const theme = useMemo<WorldTheme>(() => {
-    if (!child) return getThemeById('forest');
-    return getThemeById(child.path_theme_id || 'forest');
-  }, [child?.path_theme_id]);
+  const theme: WorldTheme = useMonthlyTheme(child?.current_month_cycle ?? 1);
 
   const fetchData = async () => {
     if (!child?.id || !child?.track_level) return;
@@ -96,6 +107,11 @@ export default function PathScreen() {
 
       if (plansError) throw plansError;
       setDailyPlans(plans || []);
+
+      const { data: todayTask } = await (supabase as any).rpc('get_today_task', {
+        p_child_id: child.id,
+      });
+      setTodayCompleted(!!(todayTask as any)?.completed_this_cycle);
     } catch (error) {
       console.error('Error fetching path data:', error);
       setLoadError(true);
@@ -114,14 +130,38 @@ export default function PathScreen() {
 
   useFocusEffect(
     React.useCallback(() => {
+      autoOpenedRef.current = false;
+      return () => {
+        autoOpenedRef.current = false;
+      };
+    }, [])
+  );
+
+  useEffect(() => {
+    if (!child || dataLoading || dailyPlans.length === 0) return;
+    if (autoOpenedRef.current) return;
+    if (todayCompleted) return;
+    if (isPreviewVisible) return;
+
+    const todayPlan = dailyPlans.find(p => p.day_number === safePathDay);
+    const isRestDay = [7, 14, 21, 28].includes(safePathDay);
+    if (!todayPlan || isRestDay) return;
+
+    autoOpenedRef.current = true;
+    setSelectedPlan(todayPlan);
+    setIsPreviewVisible(true);
+  }, [child, dataLoading, dailyPlans, todayCompleted, isPreviewVisible, safePathDay]);
+
+  useFocusEffect(
+    React.useCallback(() => {
       if (!child || !scrollRef.current || nodePositions.length === 0) return;
 
       const timer = setTimeout(() => {
-        const currentIndex = child.path_day - 1;
-        if (currentIndex < 0 || currentIndex >= nodePositions.length) return;
+        const currentIndex = safePathDay - 1;
+        const node = nodePositions[currentIndex];
+        if (!node) return;
 
-        const nodeY = nodePositions[currentIndex].y;
-        const scrollTarget = nodeY - screenHeight / 2 + NODE_SIZE / 2;
+        const scrollTarget = node.y - screenHeight / 2 + layout.nodeSize / 2;
 
         scrollRef.current?.scrollTo({
           y: Math.max(0, scrollTarget),
@@ -130,17 +170,26 @@ export default function PathScreen() {
       }, 150);
 
       return () => clearTimeout(timer);
-    }, [child?.path_day, nodePositions, screenHeight])
+    }, [child, safePathDay, nodePositions, screenHeight, layout])
   );
 
   const handleNodePress = async (day: number, plan: DailyPlan | undefined) => {
     if (!child) return;
 
-    if (day > child.path_day) {
+    if (day > safePathDay) {
       return;
     }
 
-    if (!plan) {
+    const isRestDay = [7, 14, 21, 28].includes(day);
+
+    if (isRestDay && day === safePathDay) {
+      await handleClaimTreasure();
+      return;
+    }
+
+    if (isRestDay) return;
+
+    if (!plan && day !== safePathDay) {
       Alert.alert(
         t('path.coming_soon_title', { defaultValue: 'Coming Soon' }),
         t('path.coming_soon_message', { defaultValue: 'This day\'s exercises are not available yet. Check back soon!' })
@@ -148,14 +197,8 @@ export default function PathScreen() {
       return;
     }
 
-    const isRestDay = [7, 14, 21, 28].includes(day);
-
-    if (isRestDay && day === child.path_day) {
-      await handleClaimTreasure();
-    } else if (!isRestDay) {
-      setSelectedPlan(plan);
-      setIsPreviewVisible(true);
-    }
+    setSelectedPlan(plan ?? null);
+    setIsPreviewVisible(true);
   };
 
   const handleClaimTreasure = async () => {
@@ -197,10 +240,10 @@ export default function PathScreen() {
     if (!pos) return null;
 
     const isRestDay = [7, 14, 21, 28].includes(day);
-    const isPast = day < child.path_day;
-    const isCurrent = day === child.path_day;
-    const isFuture = day > child.path_day;
-    const size = isCurrent ? CURRENT_NODE_SIZE : NODE_SIZE;
+    const isPast = day < safePathDay;
+    const isCurrent = day === safePathDay;
+    const isFuture = day > safePathDay;
+    const size = isCurrent ? layout.currentNodeSize : layout.nodeSize;
     const half = size / 2;
 
     return (
@@ -287,7 +330,19 @@ export default function PathScreen() {
     );
   }
 
-  const completedCount = Math.max(0, child.path_day - 1);
+  const completedCount = Math.max(0, safePathDay - 1);
+  const progressPct = Math.min(100, Math.max(0, (completedCount / dayCount) * 100));
+  const todayPlan = dailyPlans.find(p => p.day_number === safePathDay);
+  const todayIsRest = [7, 14, 21, 28].includes(safePathDay);
+
+  const openToday = () => {
+    if (todayIsRest) {
+      handleClaimTreasure();
+      return;
+    }
+    setSelectedPlan(todayPlan ?? null);
+    setIsPreviewVisible(true);
+  };
 
   return (
     <View style={styles.container}>
@@ -296,22 +351,63 @@ export default function PathScreen() {
         style={StyleSheet.absoluteFill}
       />
 
-      <View style={styles.header}>
-        <Text style={styles.title}>{t('path.title', { defaultValue: 'Your Journey' })}</Text>
-        <View style={styles.statsContainer}>
-          <View style={styles.statBox}>
-            <Text style={styles.statLabel}>{t('path.day')}</Text>
-            <Text style={styles.statValue}>{child.path_day}/30</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statLabel}>{t('path.streak')}</Text>
-            <Text style={styles.statValue}>{child.current_streak}</Text>
-          </View>
-          <View style={styles.statBox}>
-            <Text style={styles.statLabel}>{t('path.points')}</Text>
-            <Text style={styles.statValue}>{child.total_points}</Text>
+      <View style={[styles.header, layout.isCompact && styles.headerCompact]}>
+        <View style={styles.titleRow}>
+          <Text style={[styles.title, layout.isCompact && styles.titleCompact]}>
+            {t('path.title', { defaultValue: 'Your Journey' })}
+          </Text>
+          <View style={styles.dayPill}>
+            <Text style={styles.dayPillText}>{safePathDay}/30</Text>
           </View>
         </View>
+
+        <View style={styles.progressTrack}>
+          <View style={[styles.progressFill, { width: `${progressPct}%`, backgroundColor: theme.nodeColor }]} />
+        </View>
+
+        <View style={styles.statsRow}>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipLabel}>{t('path.streak')}</Text>
+            <Text style={styles.statChipValue}>🔥 {child.current_streak}</Text>
+          </View>
+          <View style={styles.statChip}>
+            <Text style={styles.statChipLabel}>{t('path.points')}</Text>
+            <Text style={styles.statChipValue}>⭐ {child.total_points}</Text>
+          </View>
+        </View>
+
+        {todayCompleted ? (
+          <View style={styles.todayCardDone}>
+            <Check size={18} color="#10B981" strokeWidth={3} />
+            <Text style={styles.todayCardDoneText}>
+              {t('path.today_completed', { defaultValue: '✓ הושלם להיום — נתראה מחר' })}
+            </Text>
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={[styles.todayCard, { borderColor: theme.nodeColor }]}
+            onPress={openToday}
+            activeOpacity={0.85}
+          >
+            <View style={styles.todayCardLeft}>
+              <Text style={styles.todayCardLabel}>
+                {t('path.today_label', { defaultValue: 'היום · יום' })} {safePathDay}
+              </Text>
+              <Text style={styles.todayCardTitle} numberOfLines={1}>
+                {todayIsRest
+                  ? t('path.treasure_day', { defaultValue: 'יום אוצר 🎁' })
+                  : todayPlan?.title || t('path.coming_soon_title', { defaultValue: 'בקרוב' })}
+              </Text>
+            </View>
+            <View style={[styles.todayCardCta, { backgroundColor: theme.nodeColor }]}>
+              {todayIsRest ? (
+                <Sparkles size={18} color="#1F2937" />
+              ) : (
+                <Play size={18} color="#1F2937" fill="#1F2937" />
+              )}
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
 
       <ScrollView
@@ -357,12 +453,14 @@ export default function PathScreen() {
           setSelectedPlan(null);
         }}
         plan={selectedPlan}
-        onStart={(planId: string) => {
+        dayNumber={safePathDay}
+        onStart={(planId: string | null, firstExerciseId?: string) => {
           setIsPreviewVisible(false);
-          router.push({
-            pathname: '/exercise-player',
-            params: { planId },
-          });
+          if (planId) {
+            router.push({ pathname: '/exercise-player', params: { planId } });
+          } else if (firstExerciseId) {
+            router.push({ pathname: '/exercise-player', params: { exerciseId: firstExerciseId } });
+          }
           setSelectedPlan(null);
         }}
       />
@@ -393,8 +491,8 @@ function DayNode({
     if (isCurrent) {
       scale.value = withRepeat(
         withSequence(
-          withTiming(1.1, { duration: 800, easing: Easing.inOut(Easing.ease) }),
-          withTiming(1, { duration: 800, easing: Easing.inOut(Easing.ease) })
+          withTiming(1.08, { duration: 450, easing: Easing.inOut(Easing.ease) }),
+          withTiming(1, { duration: 450, easing: Easing.inOut(Easing.ease) })
         ),
         -1,
         false
@@ -490,9 +588,9 @@ function TreasureNode({
     if (isCurrent) {
       rotation.value = withRepeat(
         withSequence(
-          withTiming(-10, { duration: 200 }),
-          withTiming(10, { duration: 400 }),
-          withTiming(0, { duration: 200 })
+          withTiming(-8, { duration: 140 }),
+          withTiming(8, { duration: 280 }),
+          withTiming(0, { duration: 140 })
         ),
         -1,
         false
@@ -575,44 +673,135 @@ const styles = StyleSheet.create({
     backgroundColor: '#0F2A1D',
   },
   header: {
-    paddingTop: 60,
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-    backgroundColor: 'rgba(0,0,0,0.25)',
+    paddingTop: Platform.OS === 'web' ? 16 : 56,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
+    backgroundColor: 'rgba(0,0,0,0.28)',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255,255,255,0.06)',
     zIndex: 10,
+    gap: 10,
+  },
+  headerCompact: {
+    paddingTop: Platform.OS === 'web' ? 12 : 48,
+    paddingHorizontal: 12,
+    paddingBottom: 10,
+    gap: 8,
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 8,
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '800',
     color: '#FFFFFF',
-    marginBottom: 12,
     textShadowColor: 'rgba(0, 0, 0, 0.4)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
   },
-  statsContainer: {
-    flexDirection: 'row',
-    gap: 10,
+  titleCompact: {
+    fontSize: 20,
   },
-  statBox: {
+  dayPill: {
+    backgroundColor: 'rgba(255,255,255,0.14)',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 999,
+  },
+  dayPillText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.3,
+  },
+  progressTrack: {
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    overflow: 'hidden',
+  },
+  progressFill: {
+    height: '100%',
+    borderRadius: 3,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  statChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 999,
+  },
+  statChipLabel: {
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.65)',
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
+  },
+  statChipValue: {
+    fontSize: 13,
+    color: '#FFFFFF',
+    fontWeight: '700',
+  },
+  todayCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+  },
+  todayCardLeft: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.12)',
-    padding: 10,
-    borderRadius: 12,
+    minWidth: 0,
+  },
+  todayCardLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: 'rgba(255,255,255,0.7)',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+    marginBottom: 2,
+  },
+  todayCardTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  todayCardCta: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  statLabel: {
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.7)',
-    fontWeight: '600',
-    marginBottom: 2,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+  todayCardDone: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: 'rgba(16,185,129,0.18)',
+    borderColor: 'rgba(16,185,129,0.45)',
+    borderWidth: 1,
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
   },
-  statValue: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#FFFFFF',
+  todayCardDoneText: {
+    color: '#D1FAE5',
+    fontSize: 13,
+    fontWeight: '700',
+    flex: 1,
   },
   scrollView: {
     flex: 1,

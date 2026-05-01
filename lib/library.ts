@@ -16,19 +16,10 @@ export type LibraryItemUpdate = Database['public']['Tables']['library_items']['U
  * Extended library item with exercise details joined
  */
 export interface LibraryItemWithExercise extends LibraryItem {
-  exercise: {
-    id: string;
-    animation_id: string;
-    icon_id: string | null;
-    audio_path_en: string | null;
-    audio_path_he: string | null;
-    title_en: string;
-    title_he: string;
-    description_en: string | null;
-    description_he: string | null;
-    status: string;
-  };
+  exercise: ExerciseData;
 }
+
+export type InstructionStep = { step: number; text: string };
 
 export interface ExerciseData {
   id: string;
@@ -41,6 +32,20 @@ export interface ExerciseData {
   description_en: string | null;
   description_he: string | null;
   status: string;
+  instructions_he?: InstructionStep[] | null;
+  instructions_en?: InstructionStep[] | null;
+  exercise_type?: string | null;
+  default_duration_seconds?: number | null;
+  default_reps?: number | null;
+}
+
+export function getLocalizedInstructions(
+  exercise: ExerciseData,
+  locale: 'en' | 'he'
+): InstructionStep[] {
+  const raw = locale === 'he' ? exercise.instructions_he : exercise.instructions_en;
+  if (Array.isArray(raw)) return raw;
+  return [];
 }
 
 export interface PlaylistExerciseItem {

@@ -13,13 +13,16 @@ import {
   getLibraryItemById,
   getLocalizedLibraryItem,
   getLocalizedExercise,
+  getLocalizedInstructions,
 } from '@/lib/library';
-import type { ExerciseData } from '@/lib/library';
+import type { ExerciseData, InstructionStep } from '@/lib/library';
 import { ExerciseAnimationRenderer } from '@/components/exercises/ExerciseRegistry';
 import CompletionModal from '@/components/exercises/CompletionModal';
 import PlaylistProgressBar from '@/components/exercises/PlaylistProgressBar';
 import ExerciseTimerDisplay from '@/components/exercises/ExerciseTimerDisplay';
 import ExerciseRepsPrompt from '@/components/exercises/ExerciseRepsPrompt';
+import ExerciseInstructions from '@/components/exercises/ExerciseInstructions';
+import StreakCelebration from '@/components/exercises/StreakCelebration';
 import { useChildSession } from '@/contexts/ChildSessionContext';
 import { usePlaylistQueue } from '@/hooks/usePlaylistQueue';
 import { useExerciseAudio } from '@/hooks/useExerciseAudio';
@@ -36,6 +39,8 @@ interface ResolvedExercise {
   description: string | null;
   durationSeconds: number | null;
   targetReps: number | null;
+  instructions: InstructionStep[];
+  exerciseType: string | null;
 }
 
 export default function ExercisePlayerScreen() {
@@ -62,6 +67,9 @@ export default function ExercisePlayerScreen() {
   const [showModal, setShowModal] = useState(false);
   const [totalPointsEarned, setTotalPointsEarned] = useState(0);
   const [loggingCompletion, setLoggingCompletion] = useState(false);
+
+  const [instructionsAcknowledged, setInstructionsAcknowledged] = useState(false);
+  const [celebrationStreak, setCelebrationStreak] = useState<number | null>(null);
 
   const animationTriggerRef = useRef(false);
   const [animKey, setAnimKey] = useState(0);
@@ -95,10 +103,31 @@ export default function ExercisePlayerScreen() {
         setTransitioning(false);
       }, 600);
     } else {
+      // End-of-playlist (or single-exercise) — record daily plan completion if applicable
+      if (isPlaylistMode && params.planId) {
+        try {
+          const prevStreak = child.current_streak ?? 0;
+          const { data: planComplete } = await (supabase as any).rpc('complete_daily_plan', {
+            p_child_id: child.id,
+            p_plan_id: params.planId,
+            p_duration_seconds: null,
+            p_exercises_completed: playlist.totalExercises,
+            p_exercises_total: playlist.totalExercises,
+            p_points: 20,
+          });
+          const updatedChild = (planComplete as any)?.child;
+          const newStreak = updatedChild?.current_streak ?? prevStreak;
+          if (newStreak > prevStreak) {
+            setCelebrationStreak(newStreak);
+          }
+        } catch (_) {
+          // Ignore — completion already shown
+        }
+      }
       setHasCompleted(true);
       setShowModal(true);
     }
-  }, [resolved, child, loggingCompletion, isPlaylistMode, playlist.isLastExercise]);
+  }, [resolved, child, loggingCompletion, isPlaylistMode, playlist.isLastExercise, playlist.totalExercises, params.planId]);
 
   const audio = useExerciseAudio(
     resolved?.audioUrl ?? null,
@@ -134,9 +163,12 @@ export default function ExercisePlayerScreen() {
       description: localized.description,
       durationSeconds: item.durationSeconds,
       targetReps: item.targetReps,
+      instructions: getLocalizedInstructions(item.exercise, locale),
+      exerciseType: item.exercise.exercise_type ?? null,
     });
     setIsPlaying(false);
     setHasCompleted(false);
+    setInstructionsAcknowledged(false);
     animationTriggerRef.current = false;
     setAnimKey((k) => k + 1);
     setLoading(false);
@@ -196,7 +228,10 @@ export default function ExercisePlayerScreen() {
             description: loc.description,
             durationSeconds: null,
             targetReps: null,
+            instructions: getLocalizedInstructions(item.exercise, locale),
+            exerciseType: item.exercise.exercise_type ?? null,
           });
+          setInstructionsAcknowledged(false);
           return;
         }
 
@@ -224,7 +259,10 @@ export default function ExercisePlayerScreen() {
             description: loc.description,
             durationSeconds: null,
             targetReps: null,
+            instructions: getLocalizedInstructions(exercise, locale),
+            exerciseType: exercise.exercise_type ?? null,
           });
+          setInstructionsAcknowledged(false);
         }
       } catch (_) {
         setError('Failed to load exercise');
@@ -319,6 +357,13 @@ export default function ExercisePlayerScreen() {
     );
   }
 
+  const showInstructions =
+    !!resolved &&
+    resolved.instructions.length > 0 &&
+    !instructionsAcknowledged &&
+    !isPlaying &&
+    !hasCompleted;
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -339,6 +384,21 @@ export default function ExercisePlayerScreen() {
         />
       )}
 
+      {showInstructions ? (
+        <ExerciseInstructions
+          title={resolved.title}
+          steps={resolved.instructions}
+          exerciseType={resolved.exerciseType}
+          durationSeconds={resolved.durationSeconds}
+          onStart={() => {
+            setInstructionsAcknowledged(true);
+            if (isReadyToPlay) {
+              handlePlay();
+            }
+          }}
+        />
+      ) : (
+      <>
       <View style={styles.animationContainer}>
         {resolved.enableAnimation && animationTriggerRef.current ? (
           <ExerciseAnimationRenderer
@@ -436,6 +496,8 @@ export default function ExercisePlayerScreen() {
           )}
         </View>
       </View>
+      </>
+      )}
 
       <CompletionModal
         visible={showModal}
@@ -443,6 +505,12 @@ export default function ExercisePlayerScreen() {
         onDismiss={handleModalDismiss}
         isWorkout={isPlaylistMode}
         exerciseCount={isPlaylistMode ? playlist.totalExercises : undefined}
+      />
+
+      <StreakCelebration
+        visible={celebrationStreak !== null}
+        streak={celebrationStreak ?? 0}
+        onDismiss={() => setCelebrationStreak(null)}
       />
     </View>
   );

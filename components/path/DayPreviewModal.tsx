@@ -31,13 +31,15 @@ interface DayPreviewModalProps {
   visible: boolean;
   onClose: () => void;
   plan: DailyPlan | null;
-  onStart: (planId: string) => void;
+  dayNumber?: number;
+  onStart: (planId: string | null, firstExerciseId?: string) => void;
 }
 
 export default function DayPreviewModal({
   visible,
   onClose,
   plan,
+  dayNumber,
   onStart,
 }: DayPreviewModalProps) {
   const { t, i18n } = useTranslation();
@@ -48,10 +50,13 @@ export default function DayPreviewModal({
   const isHebrew = i18n.language === 'he';
 
   useEffect(() => {
-    if (visible && plan) {
-      fetchExercises(plan.id);
-    }
-    if (!visible) {
+    if (visible) {
+      if (plan) {
+        fetchExercises(plan.id);
+      } else {
+        fetchFallbackExercises();
+      }
+    } else {
       setExercises([]);
       setError(false);
     }
@@ -64,7 +69,7 @@ export default function DayPreviewModal({
 
       const { data, error: fetchError } = await supabase
         .from('workout_items')
-        .select('id, sequence_order, duration_seconds, target_reps, exercise_id, exercises(title_en, title_he)')
+        .select('id, sequence_order, duration_seconds, target_reps, exercise_id, exercises(title_en, title_he, default_duration_seconds, default_reps)')
         .eq('plan_id', planId)
         .order('sequence_order', { ascending: true });
 
@@ -74,12 +79,17 @@ export default function DayPreviewModal({
         id: item.id,
         exercise_id: item.exercise_id,
         sequence_order: item.sequence_order,
-        duration_seconds: item.duration_seconds,
-        target_reps: item.target_reps,
+        duration_seconds: item.duration_seconds ?? item.exercises?.default_duration_seconds ?? null,
+        target_reps: item.target_reps ?? item.exercises?.default_reps ?? null,
         title: isHebrew
           ? item.exercises?.title_he || item.exercises?.title_en || ''
           : item.exercises?.title_en || '',
       }));
+
+      if (mapped.length === 0) {
+        await fetchFallbackExercises();
+        return;
+      }
 
       setExercises(mapped);
     } catch (err) {
@@ -90,7 +100,37 @@ export default function DayPreviewModal({
     }
   };
 
-  if (!plan) return null;
+  const fetchFallbackExercises = async () => {
+    try {
+      setLoading(true);
+      setError(false);
+
+      const { data, error: fetchError } = await (supabase as any)
+        .from('exercises')
+        .select('id, title_en, title_he, default_duration_seconds, default_reps, status')
+        .eq('status', 'active')
+        .order('animation_id', { ascending: true })
+        .limit(5);
+
+      if (fetchError) throw fetchError;
+
+      const mapped: WorkoutExercise[] = (data || []).map((ex: any, idx: number) => ({
+        id: ex.id,
+        exercise_id: ex.id,
+        sequence_order: idx + 1,
+        duration_seconds: ex.default_duration_seconds ?? null,
+        target_reps: ex.default_reps ?? null,
+        title: isHebrew ? ex.title_he || ex.title_en || '' : ex.title_en || '',
+      }));
+
+      setExercises(mapped);
+    } catch (err) {
+      console.error('Error fetching fallback exercises:', err);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const totalDuration = exercises.reduce(
     (sum, ex) => sum + (ex.duration_seconds || 0),
@@ -134,10 +174,10 @@ export default function DayPreviewModal({
             <View style={styles.headerRow}>
               <View style={styles.headerText}>
                 <Text style={styles.dayLabel}>
-                  {t('path.day_label', { defaultValue: 'Day {{day}}', day: plan.day_number })}
+                  {t('path.day_label', { defaultValue: 'Day {{day}}', day: plan?.day_number ?? dayNumber ?? 1 })}
                 </Text>
                 <Text style={styles.planTitle} numberOfLines={2}>
-                  {plan.title}
+                  {plan?.title ?? t('path.todays_exercises', { defaultValue: 'תרגילים להיום' })}
                 </Text>
               </View>
               <TouchableOpacity
@@ -149,7 +189,7 @@ export default function DayPreviewModal({
               </TouchableOpacity>
             </View>
 
-            {plan.description ? (
+            {plan?.description ? (
               <Text style={styles.description} numberOfLines={3}>
                 {plan.description}
               </Text>
@@ -181,7 +221,7 @@ export default function DayPreviewModal({
                   <Text style={styles.errorText}>
                     {t('common.error_loading_data', { defaultValue: 'Could not load data' })}
                   </Text>
-                  <TouchableOpacity onPress={() => plan && fetchExercises(plan.id)}>
+                  <TouchableOpacity onPress={() => (plan ? fetchExercises(plan.id) : fetchFallbackExercises())}>
                     <Text style={styles.retryText}>
                       {t('common.retry', { defaultValue: 'Retry' })}
                     </Text>
@@ -235,8 +275,11 @@ export default function DayPreviewModal({
             <TouchableOpacity
               style={[styles.startButton, (loading || exercises.length === 0) && styles.startButtonDisabled]}
               onPress={() => {
-                if (exercises.length > 0 && plan) {
+                if (exercises.length === 0) return;
+                if (plan) {
                   onStart(plan.id);
+                } else {
+                  onStart(null, exercises[0].exercise_id);
                 }
               }}
               disabled={loading || exercises.length === 0}

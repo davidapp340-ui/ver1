@@ -52,7 +52,11 @@
       "passwords_not_match": "הסיסמאות אינן תואמות",
       "password_too_short": "הסיסמה חייבת להכיל לפחות 6 תווים",
       "auth_failed": "האימות נכשל",
-      "unexpected_error": "אירעה שגיאה בלתי צפויה"
+      "unexpected_error": "אירעה שגיאה בלתי צפויה",
+      "invalid_email": "כתובת האימייל אינה תקינה",
+      "invalid_credentials": "פרטי הכניסה שגויים",
+      "email_not_confirmed": "יש לאמת את כתובת האימייל לפני הכניסה",
+      "user_already_registered": "משתמש עם אימייל זה כבר קיים במערכת"
     }
   },
   "parent_home": {
@@ -72,6 +76,9 @@
         "name_placeholder": "הזן שם",
         "birth_date_label": "תאריך לידה",
         "birth_date_placeholder": "בחר תאריך",
+        "input_mode_birth_date": "תאריך לידה",
+        "input_mode_age": "גיל",
+        "age_label": "גיל הילד",
         "gender_label": "מגדר (אופציונלי)",
         "gender_placeholder": "בחר מגדר",
         "next_button": "המשך",
@@ -196,7 +203,63 @@
     "treasure_points": "הרווחת {{points}} נקודות בונוס!",
     "treasure_error": "נכשל באיסוף האוצר. אנא נסה שוב.",
     "coming_soon_title": "בקרוב",
-    "coming_soon_message": "תרגילים ליום זה עדיין לא זמינים. חזור בקרוב!"
+    "coming_soon_message": "תרגילים ליום זה עדיין לא זמינים. חזור בקרוב!",
+    "today_completed": "✓ הושלם להיום — נתראה מחר",
+    "today_label": "היום · יום",
+    "treasure_day": "יום אוצר 🎁"
+  },
+  "instructions": {
+    "helps_with": "מסייע ל",
+    "duration": "משך",
+    "seconds": "שניות",
+    "how_to": "איך מבצעים",
+    "ready": "הבנתי, התחל",
+    "benefit": {
+      "eye_muscle": "מחזק את שרירי העיניים",
+      "near_far": "משפר מעבר מיקוד קרוב/רחוק",
+      "relaxation": "מרגיע את העיניים",
+      "blinking": "משמן את העיניים",
+      "tracking": "משפר מעקב חזותי"
+    }
+  },
+  "celebration": {
+    "day_streak": "ימים ברצף!",
+    "keep_going": "נמשיך מחר!"
+  },
+  "exercise": {
+    "near": "קרוב",
+    "far": "רחוק",
+    "blink_now": "מצמצי",
+    "breathe_in": "שאפי",
+    "breathe_hold": "החזיקי",
+    "breathe_out": "נשפי"
+  },
+  "admin": {
+    "unlock_title": "גישת מנהל",
+    "unlock_subtitle": "הזיני קוד מנהל בן 6 ספרות",
+    "unlock_submit": "פתחי",
+    "unlock_note": "גישה זו פותחת ניווט בלבד. כדי לערוך תוכן יש להיות מסומן כ-admin בבסיס הנתונים.",
+    "invalid_code": "קוד לא נכון",
+    "add": "הוספה",
+    "edit": "עריכה",
+    "exercises_total": "תרגילים",
+    "tabs": {
+      "exercises": "תרגילים",
+      "plans": "מסלול 30 יום",
+      "library": "גלריה",
+      "taxonomy": "קטגוריות גלריה",
+      "stats": "נתונים"
+    },
+    "banner": {
+      "exercises_title": "תרגילים — הספרייה הראשית",
+      "exercises_subtitle": "כל התרגילים במערכת. כל תרגיל יכול להופיע גם בגלריה (לצפייה חופשית) וגם במסלול 30 יום (כחלק מתוכנית יומית).",
+      "plans_title": "מסלול 30 יום (המסע)",
+      "plans_subtitle": "תוכניות יומיות שמרכיבות את המסלול שמופיע לילד בעמוד \"המסע\" — יום אחר יום, יום 1 עד 30.",
+      "library_title": "גלריה — קטגוריות תרגילים",
+      "library_subtitle": "תרגילים לצפייה חופשית של הילד, מקובצים לקטגוריות. לא משפיע על המסע / מסלול 30 יום.",
+      "taxonomy_title": "קטגוריות גלריה ונושאי החודש",
+      "taxonomy_subtitle": "הקטגוריות שלפיהן מסודרים תרגילי הגלריה, וכן ערכות הנושא הוויזואליות של המסלול לפי חודש."
+    }
   },
   "child_profile": {
     "title": "פרופיל",

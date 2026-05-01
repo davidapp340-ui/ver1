@@ -33,3 +33,11 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# local scripts with secrets
+create_demo_user.js
+run_migrations.js
+find_region.js
+
+# supabase local state
+supabase/.temp/

@@ -12,9 +12,9 @@ import {
   KeyboardAvoidingView,
   Linking,
 } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
-import { ArrowLeft, Calendar } from 'lucide-react-native';
+import { ArrowLeft } from 'lucide-react-native';
+import BirthDatePicker from '@/components/BirthDatePicker';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useChildSession } from '@/contexts/ChildSessionContext';
@@ -57,7 +57,6 @@ export default function IndependentSignupScreen() {
       router.replace('/(independent)/home');
     }
   }, [signupComplete, isIndependent, child]);
-  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const [step1Data, setStep1Data] = useState<Step1Data>({
     email: '',
@@ -158,26 +157,6 @@ export default function IndependentSignupScreen() {
   const handleBack = () => {
     setError('');
     setCurrentStep(currentStep - 1);
-  };
-
-  const handleDateChange = (event: any, selectedDate?: Date) => {
-    if (Platform.OS === 'android') {
-      setShowDatePicker(false);
-    }
-    if (selectedDate) {
-      const formattedDate = selectedDate.toISOString().split('T')[0];
-      setStep2Data({ ...step2Data, birthDate: formattedDate });
-    }
-  };
-
-  const formatDateForDisplay = (dateString: string): string => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
   };
 
   const handleSubmit = async () => {
@@ -390,35 +369,11 @@ export default function IndependentSignupScreen() {
 
       <View style={styles.fieldGroup}>
         <Text style={styles.label}>{t('independent_signup.step2.birth_date_label')}</Text>
-        <TouchableOpacity
-          style={styles.datePickerButton}
-          onPress={() => setShowDatePicker(true)}
-        >
-          <Text style={step2Data.birthDate ? styles.dateText : styles.datePlaceholder}>
-            {step2Data.birthDate
-              ? formatDateForDisplay(step2Data.birthDate)
-              : t('independent_signup.step2.birth_date_placeholder')}
-          </Text>
-          <Calendar size={20} color="#6B7280" />
-        </TouchableOpacity>
-        {showDatePicker && (
-          <DateTimePicker
-            value={step2Data.birthDate ? new Date(step2Data.birthDate) : new Date()}
-            mode="date"
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            onChange={handleDateChange}
-            maximumDate={new Date()}
-            minimumDate={new Date(1900, 0, 1)}
-          />
-        )}
-        {Platform.OS === 'ios' && showDatePicker && (
-          <TouchableOpacity
-            style={styles.datePickerDoneButton}
-            onPress={() => setShowDatePicker(false)}
-          >
-            <Text style={styles.datePickerDoneText}>Done</Text>
-          </TouchableOpacity>
-        )}
+        <BirthDatePicker
+          value={step2Data.birthDate}
+          onChange={(iso) => setStep2Data({ ...step2Data, birthDate: iso })}
+          placeholder={t('independent_signup.step2.birth_date_placeholder')}
+        />
       </View>
 
       <View style={styles.fieldGroup}>

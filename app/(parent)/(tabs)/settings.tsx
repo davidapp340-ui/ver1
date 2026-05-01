@@ -17,6 +17,8 @@ export default function SettingsScreen() {
   const [children, setChildren] = useState<Child[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [versionClickCount, setVersionClickCount] = useState(0);
+  const [versionClickTimer, setVersionClickTimer] = useState<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (profile) {
@@ -182,6 +184,22 @@ export default function SettingsScreen() {
         t('settings.errors.whatsapp_not_installed')
       );
     });
+  };
+
+  const handleVersionPress = () => {
+    const newCount = versionClickCount + 1;
+
+    if (versionClickTimer) clearTimeout(versionClickTimer);
+
+    if (newCount >= 5) {
+      setVersionClickCount(0);
+      router.push('/admin-unlock' as any);
+      return;
+    }
+
+    setVersionClickCount(newCount);
+    const timer = setTimeout(() => setVersionClickCount(0), 3000);
+    setVersionClickTimer(timer);
   };
 
   const handleVisitWebsite = () => {
@@ -353,7 +371,12 @@ export default function SettingsScreen() {
             <Text style={styles.signOutButtonText}>{t('settings.footer.sign_out')}</Text>
           </TouchableOpacity>
 
-          <Text style={styles.versionText}>{t('settings.footer.version')}</Text>
+          <TouchableOpacity
+            onPress={handleVersionPress}
+            activeOpacity={1}
+          >
+            <Text style={styles.versionText}>{t('settings.footer.version')}</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </View>

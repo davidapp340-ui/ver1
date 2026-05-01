@@ -10,6 +10,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import PalmingExercise from './palming_exercise';
+import CustomSvgExercise from './CustomSvgExercise';
 import Exercise02 from './Exercise02';
 import Exercise03 from './Exercise03';
 import Exercise04 from './Exercise04';
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
 
 export const ExerciseRegistry: Record<string, React.ComponentType<any>> = {
   'palming_v1': PalmingExercise,
+  'custom_svg': CustomSvgExercise,
   'ex_02': Exercise02,
   'ex_03': Exercise03,
   'ex_04': Exercise04,

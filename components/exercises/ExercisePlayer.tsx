@@ -90,6 +90,7 @@ export default function ExercisePlayer({ exerciseId, onComplete }: ExercisePlaye
       <View style={styles.animationContainer}>
         <ExerciseAnimationRenderer
           animationId={exercise.animation_id}
+          svgContent={(exercise as any).svg_content ?? null}
           onComplete={onComplete}
         />
       </View>

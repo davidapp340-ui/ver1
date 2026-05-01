@@ -12,11 +12,11 @@ import {
   ActivityIndicator,
   Linking,
 } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { X, Calendar } from 'lucide-react-native';
+import { X } from 'lucide-react-native';
 import { useTranslation } from 'react-i18next';
 import { supabase } from '@/lib/supabase';
 import { PRIVACY_POLICY_URL } from '@/lib/legal';
+import BirthDatePicker from '@/components/BirthDatePicker';
 
 interface AddChildWizardProps {
   visible: boolean;
@@ -39,6 +39,14 @@ interface Step2Data {
   consent: boolean;
 }
 
+function ageToBirthDate(age: number): string {
+  const today = new Date();
+  const year = today.getFullYear() - age;
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 export default function AddChildWizard({
   visible,
   onClose,
@@ -49,7 +57,8 @@ export default function AddChildWizard({
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [ageInputMode, setAgeInputMode] = useState<'birthDate' | 'age'>('birthDate');
+  const [selectedAge, setSelectedAge] = useState<number | null>(null);
 
   const [step1Data, setStep1Data] = useState<Step1Data>({
     name: '',
@@ -76,6 +85,8 @@ export default function AddChildWizard({
       consent: false,
     });
     setError('');
+    setAgeInputMode('birthDate');
+    setSelectedAge(null);
   };
 
   const handleClose = () => {
@@ -110,27 +121,6 @@ export default function AddChildWizard({
   const handleBack = () => {
     setError('');
     setCurrentStep(1);
-  };
-
-  const handleDateChange = (event: any, selectedDate?: Date) => {
-    if (Platform.OS === 'android') {
-      setShowDatePicker(false);
-    }
-
-    if (selectedDate) {
-      const formattedDate = selectedDate.toISOString().split('T')[0];
-      setStep1Data({ ...step1Data, birthDate: formattedDate });
-    }
-  };
-
-  const formatDateForDisplay = (dateString: string): string => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
   };
 
   const validateStep2 = (): boolean => {
@@ -311,37 +301,65 @@ export default function AddChildWizard({
       </View>
 
       <View style={styles.fieldGroup}>
-        <Text style={styles.label}>
-          {t('parent_home.add_child_wizard.step1.birth_date_label')}
-        </Text>
-        <TouchableOpacity
-          style={styles.datePickerButton}
-          onPress={() => setShowDatePicker(true)}
-        >
-          <Text style={step1Data.birthDate ? styles.dateText : styles.datePlaceholder}>
-            {step1Data.birthDate
-              ? formatDateForDisplay(step1Data.birthDate)
-              : t('parent_home.add_child_wizard.step1.birth_date_placeholder')}
-          </Text>
-          <Calendar size={20} color="#6B7280" />
-        </TouchableOpacity>
-        {showDatePicker && (
-          <DateTimePicker
-            value={step1Data.birthDate ? new Date(step1Data.birthDate) : new Date()}
-            mode="date"
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-            onChange={handleDateChange}
-            maximumDate={new Date()}
-            minimumDate={new Date(1900, 0, 1)}
-          />
-        )}
-        {Platform.OS === 'ios' && showDatePicker && (
+        <View style={styles.inputModeToggle}>
           <TouchableOpacity
-            style={styles.datePickerDoneButton}
-            onPress={() => setShowDatePicker(false)}
+            style={[styles.inputModeButton, ageInputMode === 'birthDate' && styles.inputModeButtonActive]}
+            onPress={() => {
+              setAgeInputMode('birthDate');
+              setSelectedAge(null);
+            }}
           >
-            <Text style={styles.datePickerDoneText}>{t('common.done') || 'Done'}</Text>
+            <Text style={[styles.inputModeButtonText, ageInputMode === 'birthDate' && styles.inputModeButtonTextActive]}>
+              {t('parent_home.add_child_wizard.step1.input_mode_birth_date')}
+            </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.inputModeButton, ageInputMode === 'age' && styles.inputModeButtonActive]}
+            onPress={() => {
+              setAgeInputMode('age');
+              setStep1Data({ ...step1Data, birthDate: '' });
+              setSelectedAge(null);
+            }}
+          >
+            <Text style={[styles.inputModeButtonText, ageInputMode === 'age' && styles.inputModeButtonTextActive]}>
+              {t('parent_home.add_child_wizard.step1.input_mode_age')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {ageInputMode === 'birthDate' ? (
+          <>
+            <Text style={styles.label}>
+              {t('parent_home.add_child_wizard.step1.birth_date_label')}
+            </Text>
+            <BirthDatePicker
+              value={step1Data.birthDate}
+              onChange={(iso) => setStep1Data({ ...step1Data, birthDate: iso })}
+              placeholder={t('parent_home.add_child_wizard.step1.birth_date_placeholder')}
+            />
+          </>
+        ) : (
+          <>
+            <Text style={styles.label}>
+              {t('parent_home.add_child_wizard.step1.age_label')}
+            </Text>
+            <View style={styles.ageGrid}>
+              {Array.from({ length: 18 }, (_, i) => i + 1).map((age) => (
+                <TouchableOpacity
+                  key={age}
+                  style={[styles.ageChip, selectedAge === age && styles.ageChipSelected]}
+                  onPress={() => {
+                    setSelectedAge(age);
+                    setStep1Data({ ...step1Data, birthDate: ageToBirthDate(age) });
+                  }}
+                >
+                  <Text style={[styles.ageChipText, selectedAge === age && styles.ageChipTextSelected]}>
+                    {age}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </>
         )}
       </View>
 
@@ -584,6 +602,61 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#6B7280',
     marginTop: 4,
+  },
+  inputModeToggle: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 16,
+  },
+  inputModeButton: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
+    borderRadius: 8,
+    padding: 10,
+    alignItems: 'center',
+  },
+  inputModeButtonActive: {
+    backgroundColor: '#EEF2FF',
+    borderColor: '#6366F1',
+  },
+  inputModeButtonText: {
+    fontSize: 14,
+    color: '#6B7280',
+    fontWeight: '500',
+  },
+  inputModeButtonTextActive: {
+    color: '#6366F1',
+    fontWeight: '600',
+  },
+  ageGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  ageChip: {
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#D1D5DB',
+    borderRadius: 8,
+    width: 52,
+    height: 52,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ageChipSelected: {
+    backgroundColor: '#EEF2FF',
+    borderColor: '#6366F1',
+  },
+  ageChipText: {
+    fontSize: 16,
+    color: '#374151',
+    fontWeight: '500',
+  },
+  ageChipTextSelected: {
+    color: '#6366F1',
+    fontWeight: '700',
   },
   pickerContainer: {
     gap: 8,

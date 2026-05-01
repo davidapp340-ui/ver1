@@ -52,7 +52,11 @@
       "passwords_not_match": "Passwords do not match",
       "password_too_short": "Password must be at least 6 characters",
       "auth_failed": "Authentication failed",
-      "unexpected_error": "An unexpected error occurred"
+      "unexpected_error": "An unexpected error occurred",
+      "invalid_email": "Invalid email address format",
+      "invalid_credentials": "Invalid email or password",
+      "email_not_confirmed": "Please confirm your email address before signing in",
+      "user_already_registered": "An account with this email already exists"
     }
   },
   "parent_home": {
@@ -72,6 +76,9 @@
         "name_placeholder": "Enter name",
         "birth_date_label": "Date of Birth",
         "birth_date_placeholder": "Select date",
+        "input_mode_birth_date": "Date of Birth",
+        "input_mode_age": "Age",
+        "age_label": "Child's Age",
         "gender_label": "Gender (Optional)",
         "gender_placeholder": "Select gender",
         "next_button": "Next",
@@ -196,7 +203,63 @@
     "treasure_points": "You earned {{points}} bonus points!",
     "treasure_error": "Failed to claim treasure. Please try again.",
     "coming_soon_title": "Coming Soon",
-    "coming_soon_message": "This day's exercises are not available yet. Check back soon!"
+    "coming_soon_message": "This day's exercises are not available yet. Check back soon!",
+    "today_completed": "✓ Done for today — see you tomorrow",
+    "today_label": "Today · Day",
+    "treasure_day": "Treasure day 🎁"
+  },
+  "instructions": {
+    "helps_with": "Helps with",
+    "duration": "Duration",
+    "seconds": "seconds",
+    "how_to": "How to do it",
+    "ready": "Got it, start",
+    "benefit": {
+      "eye_muscle": "Strengthens eye muscles",
+      "near_far": "Improves near/far focus shifts",
+      "relaxation": "Relaxes the eyes",
+      "blinking": "Lubricates the eyes",
+      "tracking": "Improves visual tracking"
+    }
+  },
+  "celebration": {
+    "day_streak": "day streak!",
+    "keep_going": "Keep going tomorrow!"
+  },
+  "exercise": {
+    "near": "Near",
+    "far": "Far",
+    "blink_now": "Blink",
+    "breathe_in": "Breathe in",
+    "breathe_hold": "Hold",
+    "breathe_out": "Breathe out"
+  },
+  "admin": {
+    "unlock_title": "Admin access",
+    "unlock_subtitle": "Enter 6-digit admin code",
+    "unlock_submit": "Unlock",
+    "unlock_note": "This unlocks navigation only. To edit content you must be marked as admin in the database.",
+    "invalid_code": "Wrong code",
+    "add": "Add",
+    "edit": "Edit",
+    "exercises_total": "exercises",
+    "tabs": {
+      "exercises": "Exercises",
+      "plans": "30-Day Path",
+      "library": "Gallery",
+      "taxonomy": "Gallery Categories",
+      "stats": "Stats"
+    },
+    "banner": {
+      "exercises_title": "Exercises — Master Library",
+      "exercises_subtitle": "All exercises in the system. Each one can appear both in the Gallery (free play) and inside the 30-day Path (as part of a daily plan).",
+      "plans_title": "30-Day Path (Journey)",
+      "plans_subtitle": "Daily plans that make up the path the child sees on the \"Journey\" screen — day 1 through day 30.",
+      "library_title": "Gallery — Exercise Categories",
+      "library_subtitle": "Exercises the child can browse freely, grouped by category. Independent from the 30-day Path.",
+      "taxonomy_title": "Gallery Categories & Monthly Themes",
+      "taxonomy_subtitle": "The categories used to organize the gallery, plus the monthly visual themes for the path."
+    }
   },
   "child_profile": {
     "title": "Profile",

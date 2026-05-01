@@ -20,7 +20,8 @@ import { supabase } from '@/lib/supabase';
 export default function ParentAuthScreen() {
   const router = useRouter();
   const { signIn, signUp } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === 'rtl';
   const [isSignUp, setIsSignUp] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -29,6 +30,23 @@ export default function ParentAuthScreen() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const mapAuthError = (error: any): string => {
+    const msg = error?.message || '';
+    if (msg.includes('invalid format') || msg.includes('Unable to validate email')) {
+      return t('auth.errors.invalid_email');
+    }
+    if (msg.includes('Invalid login credentials')) {
+      return t('auth.errors.invalid_credentials');
+    }
+    if (msg.includes('Email not confirmed')) {
+      return t('auth.errors.email_not_confirmed');
+    }
+    if (msg.includes('User already registered') || msg.includes('already been registered')) {
+      return t('auth.errors.user_already_registered');
+    }
+    return t('auth.errors.auth_failed');
+  };
 
   const handleSubmit = async () => {
     setError('');
@@ -61,7 +79,7 @@ export default function ParentAuthScreen() {
         : await signIn(email, password);
 
       if (authError) {
-        setError(authError.message || t('auth.errors.auth_failed'));
+        setError(mapAuthError(authError));
       } else if (!isSignUp) {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
@@ -109,7 +127,7 @@ export default function ParentAuthScreen() {
           {isSignUp && (
             <>
               <TextInput
-                style={styles.input}
+                style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
                 placeholder={t('auth.first_name_placeholder')}
                 value={firstName}
                 onChangeText={setFirstName}
@@ -118,7 +136,7 @@ export default function ParentAuthScreen() {
               />
 
               <TextInput
-                style={styles.input}
+                style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
                 placeholder={t('auth.last_name_placeholder')}
                 value={lastName}
                 onChangeText={setLastName}
@@ -129,7 +147,7 @@ export default function ParentAuthScreen() {
           )}
 
           <TextInput
-            style={styles.input}
+            style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
             placeholder={t('auth.email_placeholder')}
             value={email}
             onChangeText={setEmail}
@@ -139,7 +157,7 @@ export default function ParentAuthScreen() {
           />
 
           <TextInput
-            style={styles.input}
+            style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
             placeholder={t('auth.password_placeholder')}
             value={password}
             onChangeText={setPassword}
@@ -149,7 +167,7 @@ export default function ParentAuthScreen() {
 
           {isSignUp && (
             <TextInput
-              style={styles.input}
+              style={[styles.input, { textAlign: isRTL ? 'right' : 'left' }]}
               placeholder={t('auth.confirm_password_placeholder')}
               value={confirmPassword}
               onChangeText={setConfirmPassword}
